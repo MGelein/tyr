@@ -1,4 +1,4 @@
-const templates = {toLoad: ["start", "filereadersupport"]};
+const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant"]};
 const mode = {edit: "EDIT", run: "RUN"};
 
 /**
@@ -21,7 +21,7 @@ function loadTemplates(){
 function loadedTemplates(){
     let content = "";
     if(!FileReader) content = templates.filereadersupport;
-    else content = templates.start;
+    else content = templates.combatoverview;
     document.getElementById('main').innerHTML = content;
 }
 
