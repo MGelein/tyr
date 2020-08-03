@@ -93,6 +93,18 @@ a:hover{
     font-size: 0.5cm;
 }
 
+.hotkey{
+    font-style: normal;
+    color: white;
+    font-family: monospace;
+    background-color: grey;
+    border-radius: 4px;
+    padding: 8px;
+    padding-left: .75em;
+    padding-right: .75em;
+    text-transform: uppercase;
+}
+
 @media screen and (min-width: 720px){
     .container{
         margin-right: 104px;
@@ -210,4 +222,51 @@ td:nth-child(4){
 td:nth-child(5){
     background-color: rgba(255, 30, 0, 0.5);
     width: 20%;
+}
+
+.spinner {
+    display: inline-block;
+    width: 50vh;
+    height: 50vh;
+}
+
+.spinner:after {
+    content: " ";
+    display: block;
+    margin: auto;
+    margin-top: -25vh;
+    width: 50vh;
+    height: 50vh;
+    border-radius: 50%;
+    border: 6px solid #fff;
+    border-color: #07F transparent #07F transparent;
+    animation: spinner 3s linear infinite;
+}
+
+.stiller{
+    color: #07F;
+    font-size: 1cm;
+    margin-top: 25vh;
+    animation: grower 1s linear infinite;
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes grower {
+    0% {
+        transform: scale(1);
+    }
+    80% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

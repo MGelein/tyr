@@ -1,11 +1,26 @@
 const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant"]};
-const mode = {edit: "EDIT", run: "RUN"};
+const mode = {current: "", edit: "EDIT", run: "RUN"};
+const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 
 /**
  * Called when the document is loaded, this is the entry point of our code
  */
 window.onload = () => {
     loadTemplates();
+}
+
+/**
+ * Creates the global key listener that checks the screen every time someone presses a key, then quickly 
+ * checks if this happened to be a hotkey currently on screen
+ * @param {KeyboardEvent} event 
+ */
+document.onkeydown = (event) =>{
+    const hotkeys = document.getElementsByClassName('hotkey');
+    for(const hotkeyElement of hotkeys){
+        if(event.key.toUpperCase() === hotkeyElement.innerHTML.toUpperCase()){
+            hotkeyElement.click();
+        }
+    }
 }
 
 /**
@@ -21,8 +36,10 @@ function loadTemplates(){
 function loadedTemplates(){
     let content = "";
     if(!FileReader) content = templates.filereadersupport;
-    else content = templates.combatoverview;
-    document.getElementById('main').innerHTML = content;
+    else content = templates.start;
+    setTimeout(() => {
+        setMain(content);
+    }, Math.random() * 1000 + 2000);
 }
 
 /**
@@ -44,7 +61,8 @@ function loadTemplate(name){
  * @param {String} combatMode either mode.edit or mode.run 
  */
 function loadCombat(combatString, combatMode){
-    console.log(combatString, combatMode);
+    mode.current = combatMode;
+    setMain(templates.combatoverview);
 }
 
 /**
@@ -72,4 +90,12 @@ function uploadFile(event){
     const reader = new FileReader();
     reader.onload = function(){runExisting(reader.result)};
     reader.readAsText(file, 'utf8');
+}
+
+/**
+ * Sets the innerHTML of the main container. Just a little shorthand
+ * @param {String} newContent 
+ */
+function setMain(newContent){
+    document.getElementById('main').innerHTML = newContent;
 }
