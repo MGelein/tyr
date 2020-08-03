@@ -10,6 +10,23 @@ body{
     line-height: 1.8em;
 }
 
+button{
+    color: #07F;
+    background-color: white;
+    border: 1px solid #07F;
+    border-radius: 0.5em;
+    padding: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+button:hover{
+    color: white;
+    background-color: #07F;
+    box-shadow: 2px 2px 8px 0.1em rgba(30, 30, 30, 0.2);
+}
+
 div{
     margin: 0;
 }
