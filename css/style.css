@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Roboto+Mono&display=swap');
+
+body{
+    background-color: white;
+    color: #222;
+    font-family: 'Merriweather', serif;
+    margin: 0;
+    width: 100%;
+    padding-bottom: 3em;
+    line-height: 1.8em;
+}
+
+div{
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6{
+    color: #07F;
+}
+
+header{
+    display:block;
+    text-align: center;
+    background-color: rgb(30, 30, 30);
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin: 0;
+    width: 100%;
+    color: white;
+    font-family: 'Roboto Mono', monospace;
+}
+
+header h1{
+    cursor: default;
+}
+
+footer{
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    background-color: #222;
+    color: white;
+    width: 100%;
+    text-align: center;
+    font-size: 90%;
+}
+
+a{
+    color: #07F;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+.container{
+    margin: 30px;
+}
+
+@media screen and (min-width: 720px){
+    .container{
+        margin-right: 130px;
+        margin-left: 130px;
+    }
+
+    nav a{
+        margin-right: 0.25em;
+    }
+
+    iframe{
+        width: 460px;
+        height: 259px;
+    }
+}
+
+@media screen and (min-width: 1080px){
+    .container{
+        margin-right: 250px;
+        margin-left: 250px;
+    }
+
+    nav a{
+        margin-right: 0.5em;
+    }
+
+    iframe{
+        width: 560px;
+        height: 326px;
+    }
+}
+
+
+@media screen and (min-width: 1440px){
+    .container{
+        margin-right: 360px;
+        margin-left: 360px;
+    }
+
+    nav a{
+        margin-right: 1em;
+    }
+
+    iframe{
+        width: 720px;
+        height: 405px;
+    }
+}
+
+@media screen and (min-width: 1920px){
+    .container{
+        margin-right: 480px;
+        margin-left: 480px;
+    }
+    
+    nav a{
+        margin-right: 1.5em;
+    }
+
+    iframe{
+        width: 960px;
+        height: 540px;
+    }
+}
