@@ -14,11 +14,18 @@ window.onload = () => {
  * checks if this happened to be a hotkey currently on screen
  * @param {KeyboardEvent} event 
  */
-document.onkeydown = (event) =>{
+document.onkeypress = (event) =>{
     const hotkeys = document.getElementsByClassName('hotkey');
     for(const hotkeyElement of hotkeys){
         if(event.key.toUpperCase() === hotkeyElement.innerHTML.toUpperCase()){
             hotkeyElement.click();
+            const button = hotkeyElement.parentElement;
+            if(!button.classList.contains('clicked')){
+                setTimeout(()=>{
+                    button.classList.remove('clicked');
+                }, 300);
+            }
+            button.classList.add('clicked');
         }
     }
 }
@@ -37,9 +44,7 @@ function loadedTemplates(){
     let content = "";
     if(!FileReader) content = templates.filereadersupport;
     else content = templates.start;
-    setTimeout(() => {
-        setMain(content);
-    }, Math.random() * 1000 + 2000);
+    setMain(content);
 }
 
 /**
@@ -98,4 +103,33 @@ function uploadFile(event){
  */
 function setMain(newContent){
     document.getElementById('main').innerHTML = newContent;
+}
+
+/**
+ * Adds a new combatant. This starts the interactive dialogue of adding a new combatant
+ */
+function addNewCombatant(){
+    console.log("NEW!");
+}
+
+/**
+ * Skips to the next combatant in the initiative order
+ */
+function nextCombatant(){
+
+}
+
+/**
+ * Moves back to the previous combatant in the initiative order
+ */
+function prevCombatant(){
+
+}
+
+/**
+ * Sends a request to the official SRD 5E API
+ * @param {String} name 
+ */
+async function requestMonster(name){
+    await get(`https://www.dnd5eapi.co/api/monsters/${name.toLowerCase().replace(/\s/g, '-')}/`);
 }

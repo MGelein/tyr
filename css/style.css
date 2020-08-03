@@ -31,7 +31,7 @@ button{
     margin: 1em;
 }
 
-button:hover{
+button:hover, button.clicked{
     color: white;
     background-color: #07F;
     box-shadow: 2px 2px 8px 0.1em rgba(30, 30, 30, 0.2);
@@ -103,6 +103,11 @@ a:hover{
     padding-left: .75em;
     padding-right: .75em;
     text-transform: uppercase;
+    border: 2px solid grey;
+    border-bottom-color: #333;
+    border-right-color: #333;
+    border-left-color: lightgray;
+    border-top-color: lightgray;
 }
 
 @media screen and (min-width: 720px){
@@ -265,6 +270,7 @@ td:nth-child(5){
     }
     80% {
         transform: scale(1.2);
+        opacity: 0.8;
     }
     100% {
         transform: scale(1);
