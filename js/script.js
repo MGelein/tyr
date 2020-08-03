@@ -1,6 +1,7 @@
 const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
+const hotkeyHistory = {key: '', time:0};
 
 /**
  * Called when the document is loaded, this is the entry point of our code
@@ -18,7 +19,16 @@ document.onkeypress = (event) =>{
     const hotkeys = document.getElementsByClassName('hotkey');
     for(const hotkeyElement of hotkeys){
         if(event.key.toUpperCase() === hotkeyElement.innerHTML.toUpperCase()){
+            const now = (new Date()).getTime();
+            console.log(now, event.key);
+            if(hotkeyHistory.key == event.key.toUpperCase() && now - hotkeyHistory.time < 200){
+                hotkeyHistory.time = now;
+                return;
+            }
             hotkeyElement.click();
+            hotkeyHistory.key = event.key.toUpperCase();
+            hotkeyHistory.time = now;
+            console.log("click", event.key);
             const button = hotkeyElement.parentElement;
             if(!button.classList.contains('clicked')){
                 setTimeout(()=>{
