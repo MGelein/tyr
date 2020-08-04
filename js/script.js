@@ -7,6 +7,7 @@ let combatants = [];
 let round = 1;
 let monsterTemplate = {};//This holds the latest API response if it was a valid monster
 let selectedCombatant = -1;
+let activeIndex = 0; //Where we are with our selection cursor
 
 /**
  * Called when the document is loaded, this is the entry point of our code
@@ -37,7 +38,7 @@ document.onkeydown = (event) =>{
         const keyName = event.key.toUpperCase();
         if(keyName === hotkeyElement.innerHTML.toUpperCase()){
             const now = (new Date()).getTime();
-            if(hotkeyHistory.key == event.key.toUpperCase() && now - hotkeyHistory.time < 200){
+            if(hotkeyHistory.key == event.key.toUpperCase() && now - hotkeyHistory.time < 100){
                 hotkeyHistory.time = now;
                 return;
             }
@@ -104,7 +105,7 @@ function createCombatTable(){
     if(combatants.length == 0) rows.push(templates.emptytable);
     else{
         combatants.sort((a, b) => {
-            return b.initiative - a.initiative;
+            return parseInt(b.initiative) - parseInt(a.initiative);
         });
         for(let i = 0; i < combatants.length; i++){
             const combatant = combatants[i];
@@ -132,6 +133,7 @@ function createCombatRow(combatant, index){
     row = row.replace(/%%AC%%/g, combatant.armor_class);
     row = row.replace(/%%HP%%/g, combatant.hit_points);
     row = row.replace(/%%INITIATIVE%%/g, combatant.initiative);
+    if(mode.current == mode.run) row = row.replace(/%%CLASS%%/g, index == activeIndex ? 'selected': '');
     return row;
 }
 
@@ -267,7 +269,8 @@ function continueEdit(){
  * Shows the start menu
  */
 function showMain(){
-    setMain(templates.start, screen.start);
+    const temp = templates.start.replace(/%%MODE%%/g, mode.current == mode.edit ? 'Editing' : 'Running');
+    setMain(temp, screen.start);
     const button = document.getElementById('continueEditing');
     if(!button) return;
     if(combatants.length > 0){

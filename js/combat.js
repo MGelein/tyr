@@ -133,7 +133,8 @@ function changeHealth(index, amount, positive){
     if(!isNaN(amount)){
         amount = parseInt(amount);
         amount *= positive ? 1 : -1;
-        combatants[index].hit_points = parseInt(combatants[index].hit_points) + parseInt(amount);
+        const currentHealth = isNaN(parseInt(combatants[index].hit_points)) ? 0 : parseInt(combatants[index].hit_points);
+        combatants[index].hit_points = currentHealth + amount;
     }
     setMain(createCombatTable(), screen.combat);
 }
@@ -242,12 +243,22 @@ function changeInitiative(index, initiative){
  * Skips to the next combatant in the initiative order
  */
 function nextCombatant(){
-
+    activeIndex += 1;
+    if(activeIndex >= combatants.length){
+        activeIndex = 0;
+        round++;
+    }
+    setMain(createCombatTable(), screen.combat);
 }
 
 /**
  * Moves back to the previous combatant in the initiative order
  */
 function prevCombatant(){
-
+    activeIndex -= 1;
+    if(activeIndex < 0){
+        activeIndex = combatants.length - 1;
+        round --;
+    }
+    setMain(createCombatTable(), screen.combat);
 }
