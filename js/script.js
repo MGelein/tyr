@@ -2,6 +2,7 @@ const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "com
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 const hotkeyHistory = {key: '', time:0};
+const totalTemplates = templates.toLoad.length;
 let combatants = [];
 let round = 1;
 let monsterTemplate = {};//This holds the latest API response if it was a valid monster
@@ -11,6 +12,7 @@ let selectedCombatant = -1;
  * Called when the document is loaded, this is the entry point of our code
  */
 window.onload = () => {
+    document.getElementById('loader').innerHTML = 'Template 0/' + totalTemplates;
     loadTemplates();
 }
 
@@ -77,6 +79,7 @@ function loadTemplate(name){
         templates[name] = template;
         const loadIndex = templates.toLoad.indexOf(name);
         if(loadIndex > -1) templates.toLoad.splice(loadIndex, 1);
+        document.getElementById('loader').innerHTML = `Template ${totalTemplates - templates.toLoad.length}/${totalTemplates}`;
         if(templates.toLoad.length == 0) loadedTemplates();
     });
 }

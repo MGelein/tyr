@@ -318,3 +318,8 @@ td:nth-child(5){
 #continueEditing{
     margin-top: 0;
 }
+
+#loader{
+    font-size: 0.4cm;
+    color: #ccc;
+}
