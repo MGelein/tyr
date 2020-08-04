@@ -1,4 +1,4 @@
-const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant", "rename", "rearmor", "reorder", "damage", "heal", "save", "summary"]};
+const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant", "rename", "rearmor", "reorder", "damage", "heal", "save", "summary", "info"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 const totalTemplates = templates.toLoad.length;
@@ -97,11 +97,13 @@ function loadCombat(combatString, combatMode){
  * combatants object.
  */
 function createCombatTable(){
-    //Check if we all have a valid initiative
-    for(let i = 0; i < combatants.length; i++){
-        if(isNaN(combatants[i].initiative)){
-            setTimeout( () => {initiativeCombatant(i)}, 100);
-            return "";
+    //Check if we all have a valid initiative, but only do this in combat mode
+    if(mode.current == mode.run){
+        for(let i = 0; i < combatants.length; i++){
+            if(isNaN(combatants[i].initiative)){
+                setTimeout( () => {initiativeCombatant(i)}, 100);
+                return "";
+            }
         }
     }
     let rows = [];
@@ -153,7 +155,6 @@ function getSummary(combatant){
     if(!combatant.actions) return `<span class='actionSummary'><b>Player Actions</b></span>`;
     const actionSummary = []
     for(let action of combatant.actions){
-        console.log(action);
         let actionSumm = ''
         actionSumm = `<span class='actionSummary'><b>${action.name}: </b> ${action.desc}</span>`
         actionSummary.push(actionSumm);

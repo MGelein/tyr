@@ -143,8 +143,184 @@ function changeHealth(index, amount, positive){
  * Info on one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
 function infoCombatant(combatantIndex){
-    if(combatantIndex != undefined) doInfo(combatants[combatantIndex]);
+    if(combatantIndex != undefined) doInfo(combatantIndex);
     else showSelection('know more about');
+}
+
+/**
+ * Starts the info procedure by showing the info window
+ * @param {Number} combatantIndex 
+ */
+function doInfo(combatantIndex){
+    selectedCombatant = combatantIndex;
+    const combatant = combatants[combatantIndex];
+    setMain(showInfo(combatant), screen.input);
+}
+
+/**
+ * Populates the info template and returns it
+ * @param {Object} fight 
+ */
+function showInfo(fight){
+    let temp = templates.info.replace(/%%NAME%%/g, formatName(fight));
+    temp = temp.replace(/%%AC%%/g, fight.armor_class);
+    temp = temp.replace(/%%HP%%/g, fight.hit_points);
+    temp = temp.replace(/%%SPEED%%/g, fight.speed ? getSpeed(fight) : "--");
+    temp = temp.replace(/%%STR%%/g, fight.strength ? scoreToMod(fight.strength) : "--");
+    temp = temp.replace(/%%DEX%%/g, fight.dexterity ? scoreToMod(fight.dexterity) : "--");
+    temp = temp.replace(/%%CON%%/g, fight.constitution ? scoreToMod(fight.constitution) : "--");
+    temp = temp.replace(/%%INT%%/g, fight.intelligence ? scoreToMod(fight.intelligence) : "--");
+    temp = temp.replace(/%%WIS%%/g, fight.wisdom ? scoreToMod(fight.wisdom) : "--");
+    temp = temp.replace(/%%CHR%%/g, fight.charisma ? scoreToMod(fight.charisma) : "--");
+    const extras = [];
+    if(fight.proficiencies) extras.push(formatProficiencies(fight.proficiencies));
+    if(fight.damage_resistances && fight.damage_resistances.length > 0) 
+        extras.push(formatList(fight.damage_resistances, "Damage Resistances"));
+    if(fight.damage_vulnerabilities && fight.damage_vulnerabilities > 0) 
+        extras.push(formatList(fight.damage_vulnerabilities, "Damage Vulnerabilities"));
+    if(fight.damage_immunities && fight.damage_immunities.length > 0) 
+        extras.push(formatList(fight.damage_immunities, "Damage Immunities"));
+    if(fight.condition_immunities && fight.condition_immunities.length > 0) 
+        extras.push(formatList(fight.condition_immunities, "Condition Immunities"));
+    if(fight.senses) extras.push(formatSenses(fight.senses));
+    if(fight.languages) extras.push(`<li><b>Languages: </b>${fight.languages}</li>`);
+    if(fight.challenge_rating) extras.push(`<li><b>Challenge Rating: </b>${fight.challenge_rating}</li>`);
+    temp = temp.replace(/%%EXTRAS%%/g, "<ul class='extras'>" + extras.join("") + "</ul>");
+    const abilities = [];
+    if(fight.special_abilities) abilities.push(formatAbilities(fight.special_abilities));
+    temp = temp.replace(/%%ABILITIES%%/, "<ul>" + abilities.join("") + "</ul>");
+    return temp;
+}
+
+/**
+ * Neatly formats the provided array of abilities
+ * @param {Array} abs 
+ */
+function formatAbilities(abs){
+    const output = [];
+    for(let ab of abs){
+        output.push(`<li><b><i>${ab.name}${getUsage(ab)}: </i></b> ${formatDesc(ab.desc)}</li>`);
+    }
+    return output.join("");
+}
+
+/**
+ * Tries to neatly format things like spellcasting descriptions
+ * @param {String} desc 
+ */
+function formatDesc(desc){
+    const lines = desc.split("\n");
+    const output = [];
+    let foundList = false;
+    for(let line of lines){
+        if(line.trim().length < 1){
+            output.push("<ul>");
+            foundList = true;
+        }else{
+            output.push(foundList ? `<li>${line.replace('-', '-<b>').replace(':', '</b>:')}</li>` : line);
+        }
+    }
+    if(foundList) output.push("</ul>");
+    return output.join("");
+}
+
+/**
+ * Returns a neatly formatted option of usage for an ability
+ * @param {Object} ab 
+ */
+function getUsage(ab){
+    if(!ab.usage) return '';
+    return ` (${ab.usage.times} ${ab.usage.type})`;
+}
+
+/**
+ * Formats the name, type and alignment
+ * @param {Object} combatant 
+ */
+function formatName(combatant){
+    const partOne =  combatant.name;
+    let output = "";
+    const extraParts = [];
+    if(combatant.size) extraParts.push(combatant.size);
+    if(combatant.type) extraParts.push(combatant.type);
+    if(combatant.subtype) extraParts.push(`(${combatant.subtype})`);
+    if(extraParts.length > 0) output += extraParts.join(" ");
+    if(combatant.alignment) output += ", " + combatant.alignment;
+    return partOne + (output.length > 0 ? " - <span class='extraInfo'>"  + output + "</span>" : "");
+}
+
+/**
+ * Formats a list of damage vulnerabilities, immunities or resistances with a header
+ * @param {Array} list 
+ * @param {String} header 
+ */
+function formatList(list, header){
+    return `<li><b>${header}: </b>${list.join(", ")}</li>`
+}
+
+/**
+ * Formats a list of senses
+ * @param {Object} senses 
+ */
+function formatSenses(senses){
+    const keys = Object.keys(senses);
+    const output = [];
+    for(let key of keys){
+        let k = key.replace('_', ' ');
+        output.push(`${k} ${senses[key]}`);
+    }
+    return `<li><b>Senses: </b>${output.join(", ")}</li>`;
+}
+
+/**
+ * Format a list of strings with proficiencies
+ * @param {Array} profs 
+ */
+function formatProficiencies(profs){
+    const skills = [];
+    const savingThrows = [];
+    for(let prof of profs){
+        let p = prof.name.toLowerCase();
+        if(p.indexOf("saving throw:") > -1){
+            savingThrows.push(parseProf(prof));
+        }else if(p.indexOf("skill:") > -1){
+            skills.push(parseProf(prof));
+        }
+    }
+    output = ""
+    if(savingThrows.length > 0) output += `<li><b>Saving Throws: </b>` + savingThrows.join(", "); + "</li>"
+    if(skills.length > 0) output += `<li><b>Skills: </b>` + skills.join(", "); + "</li>"
+    return output;
+}
+
+/**
+ * Parses a proficiency into human readable form
+ * @param {Object} prof 
+ */
+function parseProf(prof){
+    return prof.name.split(": ")[1] + (prof.value > 0 ? "+" : "") + prof.value
+}
+
+/**
+ * Returns the number and score for a specific score
+ * @param {Number} score 
+ */
+function scoreToMod(score){
+    const mod = Math.floor((score - 10) / 2);
+    return `${score} (${mod > 0 ? '+' : ''}${mod})`;
+}
+
+/**
+ * Returns a nicely formatted speed description
+ * @param {Object} combatant 
+ */
+function getSpeed(combatant){
+    const keys = Object.keys(combatant.speed);
+    const desc = [];
+    for(let key of keys){
+        desc.push(`${combatant.speed[key]} ${key}`);
+    }
+    return desc.join(", ");
 }
 
 /**

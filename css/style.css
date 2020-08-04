@@ -11,6 +11,21 @@ body{
     overflow-x: hidden;
 }
 
+ul{
+    list-style: none;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    padding-left: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+    width: 100%;
+}
+
+ul.extras{
+    border-top: 2px solid #07F;
+    border-bottom: 2px solid #07F;
+}
+
 input{
     font-size: 0.7cm;
     font-family: 'Merriweather', serif;
@@ -159,14 +174,21 @@ table{
     vertical-align: middle;
 }
 
-thead img{
+#attributes{
+    box-shadow: none;
+    border-top: 2px solid #07F;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+#combat thead img{
     max-width: 0.8cm;
     max-height: 0.8cm;
     display: inline-block;
     vertical-align: middle;
 }
 
-tbody img{
+#combat tbody img{
     max-width: 0.5em;
     max-height: 0.5em;
     display: inline-block;
@@ -179,12 +201,12 @@ tbody img{
     cursor: pointer;
 }
  
-tbody img:hover{
+#combat tbody img:hover{
     background-color: white;
     box-shadow: 1px 1px 4px 1px rgba(30, 30, 30, 0.2);
 }
 
-thead, tbody, tr{
+#combat thead, tbody, tr{
     padding: 0;
     margin: 0;
 }
@@ -201,20 +223,20 @@ td{
     margin: 0;
 }
 
-td:nth-child(1){
+#combat td:nth-child(1){
     width: 10%;
 }
 
-td:nth-child(2){
+#combat td:nth-child(2){
     width: 30%;
 }
 
-tbody tr{
+#combat tbody tr{
     opacity: 0.7    ;
     transition: all 0.5s ease;
 }
 
-tbody tr.selected{
+#combat tbody tr.selected{
     opacity: 1;
     box-shadow: 1px 1px 4px 1px rgba(30, 30, 30, 0.2);
 }
@@ -240,17 +262,17 @@ tr.selected .mark::after{
     content: "►";
 }
 
-td:nth-child(3){
+#combat td:nth-child(3){
     background-color: rgba(0, 255, 30, 0.5);
     width: 20%;
 }
 
-td:nth-child(4){
+#combat td:nth-child(4){
     background-color: rgba(0, 119, 255, 0.5);
     width: 20%;
 }
 
-td:nth-child(5){
+#combat td:nth-child(5){
     background-color: rgba(255, 30, 0, 0.5);
     width: 20%;
 }
@@ -348,4 +370,16 @@ td:nth-child(5){
     padding: 0 0 0 1em;
     margin-right: 1em;
     font-size: 0.4cm;
+}
+
+#charInfo{
+    text-align: left;
+}
+
+#charInfo table{
+    text-align: left;
+}
+
+h1 > .extraInfo{
+    font-size: 80%;
 }
