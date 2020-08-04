@@ -45,6 +45,7 @@ function addMonster(response, amount){
  * @param {String} name 
  */
 function createMonster(name){
+    name = name.trim().toLowerCase().replace(/\s/g, '-');
     requestMonster(name).then(response => gotAPIResponse(response, name));
     const feedback = document.getElementById('feedback');
     feedback.innerHTML =  'Requesting monster data... Please wait...';
@@ -64,7 +65,7 @@ function gotAPIResponse(response, name){
         document.getElementById('submit').classList.remove('hidden');
     }else{
         monsterTemplate = response;
-        setMain(templates.nummonster.replace(/%%NAME%%/g, name), screen.input);
+        setMain(templates.nummonster.replace(/%%NAME%%/g, name.replace(/-/g, ' ')), screen.input);
     }
 }
 
@@ -91,16 +92,50 @@ function doRemove(combatant){
  * Heals one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
 function healCombatant(combatantIndex){
-    if(combatantIndex != undefined) doHeal(combatants[combatantIndex]);
+    if(combatantIndex != undefined) doHeal(combatantIndex);
     else showSelection('heal');
 }
 
 /**
+ * Starts the healing procedure by showing the heal window
+ * @param {Number} combatantIndex 
+ */
+function doHeal(combatantIndex){
+    selectedCombatant = combatantIndex;
+    const combatant = combatants[combatantIndex];
+    setMain(templates.heal.replace(/%%NAME%%/g, combatant.name), screen.input);
+}
+/**
  * Damages one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
 function damageCombatant(combatantIndex){
-    if(combatantIndex != undefined) doDamage(combatants[combatantIndex]);
+    if(combatantIndex != undefined) doDamage(combatantIndex);
     else showSelection('damage');
+}
+
+/**
+ * Starts the damaging procedure by showing the damage window
+ * @param {Number} combatantIndex 
+ */
+function doDamage(combatantIndex){
+    selectedCombatant = combatantIndex;
+    const combatant = combatants[combatantIndex];
+    setMain(templates.damage.replace(/%%NAME%%/g, combatant.name), screen.input);
+}
+
+/**
+ * Changes the hitpoints of a combatant with the provided amount
+ * @param {Number} index 
+ * @param {Number} amount 
+ * @param {Boolean} positive
+ */
+function changeHealth(index, amount, positive){
+    if(!isNaN(amount)){
+        amount = parseInt(amount);
+        amount *= positive ? 1 : -1;
+        combatants[index].hit_points = parseInt(combatants[index].hit_points) + parseInt(amount);
+    }
+    setMain(createCombatTable(), screen.combat);
 }
 
 /**
@@ -115,24 +150,92 @@ function infoCombatant(combatantIndex){
  * Rename one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
 function renameCombatant(combatantIndex){
-    if(combatantIndex != undefined) doRename(combatants[combatantIndex]);
+    if(combatantIndex != undefined) doRename(combatantIndex);
     else showSelection('rename');
+}
+
+/**
+ * Starts the renaming procedure by showing the rename window
+ * @param {Number} combatantIndex 
+ */
+function doRename(combatantIndex){
+    selectedCombatant = combatantIndex;
+    const combatant = combatants[combatantIndex];
+    setMain(templates.rename.replace(/%%NAME%%/g, combatant.name), screen.input);
+}
+
+/**
+ * Tries to change the name of the combatant at the provided index to the specified string
+ * @param {Number} index the index in the list of combatants
+ * @param {String} name the new name of this combatant
+ */
+function changeName(index, name){
+    if(name.trim().length > 0){
+        combatants[index].name = name.trim();
+    }
+    setMain(createCombatTable(), screen.combat);
 }
 
 /**
  * Change AC for one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
 function armorCombatant(combatantIndex){
-    if(combatantIndex != undefined) doArmor(combatants[combatantIndex]);
+    if(combatantIndex != undefined) doArmor(combatantIndex);
     else showSelection('rearmor');
+}
+
+/**
+ * Starts the process to change the Armor Class of a specific combatant
+ * @param {Number} combatantIndex 
+ */
+function doArmor(combatantIndex){
+    selectedCombatant = combatantIndex;
+    const combatant = combatants[combatantIndex];
+    let temp = templates.rearmor.replace(/%%NAME%%/g, combatant.name);
+    setMain(temp.replace(/%%AC%%/g, combatant.armor_class), screen.input);
+}
+
+/**
+ * Tries to change the Armor Class of the combatant at the provided index to the specified string
+ * @param {Number} index the index in the list of combatants
+ * @param {String} ac the new armor class of this combatant
+ */
+function changeArmor(index, ac){
+    if(ac > 0 && ac.length > 0){
+        combatants[index].armor_class = ac;
+    }
+    setMain(createCombatTable(), screen.combat);
 }
 
 /**
  * Change initiative for one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
 function initiativeCombatant(combatantIndex){
-    if(combatantIndex != undefined) doInitiative(combatants[combatantIndex]);
+    if(combatantIndex != undefined) doInitiative(combatantIndex);
     else showSelection('reorder');
+}
+
+/**
+ * Starts the process to change the Initiative of a specific combatant
+ * @param {Number} combatantIndex 
+ */
+function doInitiative(combatantIndex){
+    selectedCombatant = combatantIndex;
+    const combatant = combatants[combatantIndex];
+    let temp = templates.reorder.replace(/%%NAME%%/g, combatant.name);
+    setMain(temp.replace(/%%INITIATIVE%%/g, combatant.initiative), screen.input);
+}
+
+/**
+ * Tries to change the initiative of the combatant at the provided index to the specified string
+ * @param {Number} index the index in the list of combatants
+ * @param {String} initiative the new initiative of this combatant
+ */
+function changeInitiative(index, initiative){
+    if(initiative > 0 && initiative.length > 0){
+        combatants[index].initiative = initiative;
+    }
+    setMain(createCombatTable(), screen.combat);
 }
 
 /**

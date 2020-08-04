@@ -1,10 +1,11 @@
-const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant"]};
+const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant", "rename", "rearmor", "reorder", "damage", "heal"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 const hotkeyHistory = {key: '', time:0};
 let combatants = [];
 let round = 1;
 let monsterTemplate = {};//This holds the latest API response if it was a valid monster
+let selectedCombatant = -1;
 
 /**
  * Called when the document is loaded, this is the entry point of our code
@@ -63,10 +64,8 @@ function loadTemplates(){
  * Called when all templates have been loaded succesfully
  */
 function loadedTemplates(){
-    let content = "";
-    if(!FileReader) content = templates.filereadersupport;
-    else content = templates.start;
-    setMain(content, screen.start);
+    if(!FileReader) setMain(templates.filereadersupport, screen.start);
+    else showMain();
 }
 
 /**
@@ -102,7 +101,7 @@ function createCombatTable(){
     if(combatants.length == 0) rows.push(templates.emptytable);
     else{
         combatants.sort((a, b) => {
-            return a.initiative - b.initiative;
+            return b.initiative - a.initiative;
         });
         for(let i = 0; i < combatants.length; i++){
             const combatant = combatants[i];
@@ -210,7 +209,7 @@ function showSelection(action){
     if(combatants.length < 1) return;
     let selection = templates.selectcombatant;
     selection = selection.replace(/%%ACTION%%/g, action);
-    let selectionList = [];
+    let selectionList = ["<button onclick='goBack()'><i class='hotkey'>0</i>&nbsp;Cancel</button>"];
     for(let i = 0; i < combatants.length; i+=2){
         const cA = combatants[i];
         const cB = combatants[i + 1];
@@ -226,6 +225,7 @@ function showSelection(action){
  * @param {Number} number 
  */
 function selCombatant(number){
+    selectedCombatant = number;
     const action = document.getElementById('action').innerHTML;
     if(action === 'remove') removeCombatant(number);
     else if(action === 'heal') healCombatant(number);
@@ -242,13 +242,34 @@ function selCombatant(number){
  * @param {String} name 
  */
 async function requestMonster(name){
-    return JSON.parse(await get(`https://www.dnd5eapi.co/api/monsters/${name.toLowerCase().replace(/\s/g, '-')}/`));
+    return JSON.parse(await get(`https://www.dnd5eapi.co/api/monsters/${name.trim().toLowerCase().replace(/\s/g, '-')}/`));
 }
 
 /**
  * Goes back to either the start menu (from the combat tool), or the combat menu (from any other screen)
  */
 function goBack(){
-    if(screen.current == screen.combat) setMain(templates.start, screen.start);
+    if(screen.current == screen.combat) showMain();
     else setMain(createCombatTable(), screen.combat);
+}
+
+/**
+ * Continues editing from the start screen
+ */
+function continueEdit(){
+    setMain(createCombatTable(), screen.combat);
+}
+
+/**
+ * Shows the start menu
+ */
+function showMain(){
+    setMain(templates.start, screen.start);
+    const button = document.getElementById('continueEditing');
+    if(!button) return;
+    if(combatants.length > 0){
+        button.style.display = 'inline-block';
+    }else{
+        button.style.display = 'none';
+    }
 }

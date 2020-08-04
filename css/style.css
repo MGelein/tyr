@@ -314,3 +314,7 @@ td:nth-child(5){
 .monsterName{
     text-transform: capitalize;
 }
+
+#continueEditing{
+    margin-top: 0;
+}
