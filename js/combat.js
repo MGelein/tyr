@@ -114,9 +114,25 @@ function infoCombatant(combatantIndex){
 /**
  * Rename one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
-function renameCombatant(combatant){
+function renameCombatant(combatantIndex){
     if(combatantIndex != undefined) doRename(combatants[combatantIndex]);
     else showSelection('rename');
+}
+
+/**
+ * Change AC for one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
+ */
+function armorCombatant(combatantIndex){
+    if(combatantIndex != undefined) doArmor(combatants[combatantIndex]);
+    else showSelection('rearmor');
+}
+
+/**
+ * Change initiative for one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
+ */
+function initiativeCombatant(combatantIndex){
+    if(combatantIndex != undefined) doInitiative(combatants[combatantIndex]);
+    else showSelection('reorder');
 }
 
 /**

@@ -3,7 +3,7 @@
     <td><span>%%NAME%%</span>
         <img onclick='renameCombatant("%%ID%%")' src='img/pencil.png'><img onclick='infoCombatant("%%ID%%")' src='img/info.png'><img onclick='removeCombatant("%%ID%%")' src='img/remove.png'>
     </td>
-    <td><span>%%INITIATIVE%%</span><img src='img/pencil.png'></td>
-    <td><span>%%AC%%</span><img src='img/pencil.png'></td>
-    <td><img src='img/dagger.png'><span>%%HP%%</span><img src='img/healing.png'></td>
+    <td><span>%%INITIATIVE%%</span><img onclick='initiativeCombatant("%%ID%%")' src='img/pencil.png'></td>
+    <td><span>%%AC%%</span><img onclick='armorCombatant("%%ID%%")' src='img/pencil.png'></td>
+    <td><img onclick='damageCombatant("%%ID%%")' src='img/dagger.png'><span>%%HP%%</span><img onclick='healCombatant("%%ID%%")' src='img/healing.png'></td>
 </tr>

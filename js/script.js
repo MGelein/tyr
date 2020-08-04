@@ -232,6 +232,8 @@ function selCombatant(number){
     else if(action === 'damage') damageCombatant(number);
     else if(action === 'rename') renameCombatant(number);
     else if(action === 'know more about') infoCombatant(number);
+    else if(action === 'rearmor') armorCombatant(number);
+    else if(action === 'reorder') initiativeCombatant(number);
 }
 
 
