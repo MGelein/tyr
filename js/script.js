@@ -7,6 +7,8 @@ let round = 1;
 let monsterTemplate = {};//This holds the latest API response if it was a valid monster
 let selectedCombatant = -1;
 let activeIndex = 0; //Where we are with our selection cursor
+let screenSwitchTime = 0;
+let inScreenSwitchCooldown = false;
 
 /**
  * Called when the document is loaded, this is the entry point of our code
@@ -233,6 +235,8 @@ function uploadFile(event){
  * @param {String} newScreen
  */
 function setMain(newContent, newScreen){
+    screenSwitchTime = (new Date()).getTime;
+    inScreenSwitchCooldown = true;
     screen.current = newScreen;
     const bbHolder = document.getElementById('backButtonHolder');
     if(newContent === templates.start){
@@ -242,11 +246,13 @@ function setMain(newContent, newScreen){
     }else{
         bbHolder.classList.remove('hidden');
     }
-    document.getElementById('main').innerHTML = newContent;
+    setTimeout(() =>{
+        document.getElementById('main').innerHTML = newContent;
+    }, 100)
     setTimeout(() =>{
         const focusElement = document.getElementsByClassName('focus')[0];
         if(focusElement) focusElement.focus();//If anything has the focus class, make it focus
-    }, 300);
+    }, 200);
 }
 
 /**
@@ -308,18 +314,28 @@ function continueEdit(){
     setMain(createCombatTable(), screen.combat);
 }
 
+function changeMode(){
+    mode.current = mode.current == mode.edit ? mode.run : mode.edit;
+    setMain(createCombatTable(), screen.combat);
+}
+
 /**
  * Shows the start menu
  */
 function showMain(){
-    const temp = templates.start.replace(/%%MODE%%/g, mode.current == mode.edit ? 'Editing' : 'Running');
+    let temp = templates.start;
+    temp = temp.replace(/%%NEXTMODE%%/g, mode.current == mode.edit ? "Run Current" : "Edit Current");
+    temp = temp.replace(/%%HK%%/g, mode.current == mode.edit ? "R" : "E");
     setMain(temp, screen.start);
     const button = document.getElementById('continueEditing');
+    const modeButton = document.getElementById('modeChange');
     if(!button) return;
     if(combatants.length > 0){
         button.style.display = 'inline-block';
+        modeButton.style.display = 'inline-block';
     }else{
         button.style.display = 'none';
+        modeButton.style.display = 'none';
     }
     const bbHolder = document.getElementById('backButtonHolder');
     if(!bbHolder.classList.contains('hidden')) bbHolder.classList.add('hidden')

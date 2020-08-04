@@ -11,6 +11,10 @@ body{
     overflow-x: hidden;
 }
 
+code{
+    font-family: monospace;
+}
+
 ul{
     list-style: none;
     padding-top: .5em;
@@ -94,7 +98,7 @@ button:hover, button.clicked{
 
 button.big{
     font-size: 1cm;
-    margin: 1em 0 1em 0;
+    margin: 0;
 }
 
 div{
