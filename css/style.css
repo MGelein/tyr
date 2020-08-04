@@ -181,6 +181,13 @@ table{
     padding-bottom: 0.5em;
 }
 
+.actionHeader{
+    width: 100%;
+    border-top: 2px solid #07F;
+    padding-top: 0.5em;
+    margin-bottom: 0;
+}
+
 #combat thead img{
     max-width: 0.8cm;
     max-height: 0.8cm;

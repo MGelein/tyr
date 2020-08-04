@@ -185,11 +185,27 @@ function showInfo(fight){
     if(fight.senses) extras.push(formatSenses(fight.senses));
     if(fight.languages) extras.push(`<li><b>Languages: </b>${fight.languages}</li>`);
     if(fight.challenge_rating) extras.push(`<li><b>Challenge Rating: </b>${fight.challenge_rating}</li>`);
-    temp = temp.replace(/%%EXTRAS%%/g, "<ul class='extras'>" + extras.join("") + "</ul>");
+    temp = temp.replace(/%%EXTRAS%%/g, extras.length > 0 ? ("<ul class='extras'>" + extras.join("") + "</ul>") : "");
     const abilities = [];
     if(fight.special_abilities) abilities.push(formatAbilities(fight.special_abilities));
     temp = temp.replace(/%%ABILITIES%%/, "<ul>" + abilities.join("") + "</ul>");
+    temp = temp.replace(/%%ACTIONS%%/g, fight.actions ? formatActions(fight.actions) : "");
+    temp = temp.replace(/%%LEGENDARY%%/g, fight.legendary_actions ? formatActions(fight.legendary_actions, true) : "");
     return temp;
+}
+
+/**
+ * Formats the provided array of actions into a neat little bundle
+ * @param {Array} actions 
+ */
+function formatActions(actions, isLegendary){
+    if(actions.length < 0) return "";
+    let output = [`<h2 class='actionHeader'>${isLegendary ? "Legendary": ""} Actions</h2><ul>`];
+    for(let action of actions){
+        output.push(`<li><b>${action.name}: </b>${action.desc}</li>`);
+    }
+    output.push("</ul>");
+    return output.join("");
 }
 
 /**
