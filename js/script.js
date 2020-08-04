@@ -1,7 +1,6 @@
 const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant", "rename", "rearmor", "reorder", "damage", "heal", "save"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
-const hotkeyHistory = {key: '', time:0};
 const totalTemplates = templates.toLoad.length;
 let combatants = [];
 let round = 1;
@@ -41,13 +40,7 @@ document.onkeydown = (event) =>{
     for(const hotkeyElement of hotkeys){
         if(pressedKey.toUpperCase() === hotkeyElement.innerHTML.toUpperCase()){
             const now = (new Date()).getTime();
-            if(hotkeyHistory.key == pressedKey && now - hotkeyHistory.time < 100){
-                hotkeyHistory.time = now;
-                return;
-            }
             hotkeyElement.click();
-            hotkeyHistory.key = pressedKey.toUpperCase();
-            hotkeyHistory.time = now;
             const button = hotkeyElement.parentElement;
             if(!button.classList.contains('clicked')){
                 setTimeout(()=>{
