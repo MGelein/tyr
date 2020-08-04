@@ -219,6 +219,23 @@ tbody tr.selected{
     box-shadow: 1px 1px 4px 1px rgba(30, 30, 30, 0.2);
 }
 
+.selected td{
+    border-bottom: 1px solid #07F;
+}
+
+.summary{
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    padding: 0.5em;
+    margin-left: 2cm;
+    margin-right: 2cm;
+    border: 1px solid #07F;
+    border-left-width: 1em;
+    border-top-color: white;
+    border-right-color: white;
+    border-bottom-width: 2px;
+}
+
 tr.selected .mark::after{
     content: "►";
 }
@@ -322,4 +339,13 @@ td:nth-child(5){
 #loader{
     font-size: 0.4cm;
     color: #ccc;
+}
+
+.actionSummary{
+    border-bottom: 1px solid #07C;
+    border-left: 4px solid #07C;
+    display: inline-block;
+    padding: 0 0 0 1em;
+    margin-right: 1em;
+    font-size: 0.4cm;
 }

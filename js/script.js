@@ -1,4 +1,4 @@
-const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant", "rename", "rearmor", "reorder", "damage", "heal", "save"]};
+const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant", "rename", "rearmor", "reorder", "damage", "heal", "save", "summary"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 const totalTemplates = templates.toLoad.length;
@@ -136,8 +136,41 @@ function createCombatRow(combatant, index){
     row = row.replace(/%%AC%%/g, combatant.armor_class);
     row = row.replace(/%%HP%%/g, combatant.hit_points);
     row = row.replace(/%%INITIATIVE%%/g, combatant.initiative);
-    if(mode.current == mode.run) row = row.replace(/%%CLASS%%/g, index == activeIndex ? 'selected': '');
+    let summary = '';
+    if(mode.current == mode.run) {
+        row = row.replace(/%%CLASS%%/g, index == activeIndex ? 'selected': '');
+        summary = index == activeIndex ? templates.summary.replace(/%%CONTENT%%/g, getSummary(combatant)) : "";
+    }
+    row = row.replace(/%%SUMMARY%%/g, summary);
     return row;
+}
+
+/**
+ * Generates a short summary for the provided combatant
+ * @param {Object} combatant 
+ */
+function getSummary(combatant){
+    if(!combatant.actions) return `<span class='actionSummary'><b>Player Actions</b></span>`;
+    const actionSummary = []
+    for(let action of combatant.actions){
+        console.log(action);
+        let actionSumm = ''
+        actionSumm = `<span class='actionSummary'><b>${action.name}: </b> ${action.desc}</span>`
+        actionSummary.push(actionSumm);
+    }
+    return actionSummary.join(""); 
+}
+
+/**
+ * Returns a short summary of the damage for this attack
+ * @param {Object} damages
+ */
+function getActionDamage(damages){
+    let summary = []
+    for(let damage of damages){
+        summary.push(`${damage.damage_dice} ${damage.damage_type.name}`);
+    }
+    return summary.join(" + ");
 }
 
 /**
@@ -287,4 +320,6 @@ function showMain(){
     }else{
         button.style.display = 'none';
     }
+    const bbHolder = document.getElementById('backButtonHolder');
+    if(!bbHolder.classList.contains('hidden')) bbHolder.classList.add('hidden')
 }
