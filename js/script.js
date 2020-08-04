@@ -214,11 +214,24 @@ function showSelection(action){
     for(let i = 0; i < combatants.length; i+=2){
         const cA = combatants[i];
         const cB = combatants[i + 1];
-        const cBText = cB ? `<button onclick='removeCombatant(${i + 1})'><i class='hotkey'>${i + 2}</i>&nbsp;${combatants[i + 1].name}</button>`: ''
-        selectionList.push(`<button onclick='removeCombatant(${i})'><i class='hotkey'>${i + 1}</i>&nbsp;${combatants[i].name}</button>&nbsp;${cBText}`);
+        const cBText = cB ? `<button onclick='selCombatant(${i + 1})'><i class='hotkey'>${i + 2}</i>&nbsp;${combatants[i + 1].name}</button>`: ''
+        selectionList.push(`<button onclick='selCombatant(${i})'><i class='hotkey'>${i + 1}</i>&nbsp;${combatants[i].name}</button>&nbsp;${cBText}`);
     }
     selection = selection.replace(/%%COMBATANTS%%/g, selectionList.join("<br>"));
     setMain(selection, screen.input);
+}
+
+/**
+ * Called by the selection screen, this forwards our choice
+ * @param {Number} number 
+ */
+function selCombatant(number){
+    const action = document.getElementById('action').innerHTML;
+    if(action === 'remove') removeCombatant(number);
+    else if(action === 'heal') healCombatant(number);
+    else if(action === 'damage') damageCombatant(number);
+    else if(action === 'rename') renameCombatant(number);
+    else if(action === 'know more about') infoCombatant(number);
 }
 
 

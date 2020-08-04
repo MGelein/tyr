@@ -45,7 +45,6 @@ function addMonster(response, amount){
  * @param {String} name 
  */
 function createMonster(name){
-    console.log('clicky');
     requestMonster(name).then(response => gotAPIResponse(response, name));
     const feedback = document.getElementById('feedback');
     feedback.innerHTML =  'Requesting monster data... Please wait...';
@@ -74,11 +73,8 @@ function gotAPIResponse(response, name){
  * @param {Number} combatantIndex
  */
 function removeCombatant(combatantIndex){
-    if(combatantIndex != undefined){
-        doRemove(combatants[combatantIndex]);
-    }else{
-        showSelection('remove');
-    }
+    if(combatantIndex != undefined) doRemove(combatants[combatantIndex]);
+    else showSelection('remove');
 }
 
 /**
@@ -94,29 +90,33 @@ function doRemove(combatant){
 /**
  * Heals one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
-function healCombatant(combatant){
-
+function healCombatant(combatantIndex){
+    if(combatantIndex != undefined) doHeal(combatants[combatantIndex]);
+    else showSelection('heal');
 }
 
 /**
  * Damages one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
-function damageCombatant(combatant){
-
+function damageCombatant(combatantIndex){
+    if(combatantIndex != undefined) doDamage(combatants[combatantIndex]);
+    else showSelection('damage');
 }
 
 /**
  * Info on one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
-function infoCombatant(combatant){
-
+function infoCombatant(combatantIndex){
+    if(combatantIndex != undefined) doInfo(combatants[combatantIndex]);
+    else showSelection('know more about');
 }
 
 /**
  * Rename one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
  */
 function renameCombatant(combatant){
-
+    if(combatantIndex != undefined) doRename(combatants[combatantIndex]);
+    else showSelection('rename');
 }
 
 /**
