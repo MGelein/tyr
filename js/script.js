@@ -1,4 +1,4 @@
-const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant", "rename", "rearmor", "reorder", "damage", "heal"]};
+const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant", "rename", "rearmor", "reorder", "damage", "heal", "save"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 const hotkeyHistory = {key: '', time:0};
