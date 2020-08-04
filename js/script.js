@@ -15,12 +15,19 @@ window.onload = () => {
  * checks if this happened to be a hotkey currently on screen
  * @param {KeyboardEvent} event 
  */
-document.onkeypress = (event) =>{
+document.onkeydown = (event) =>{
+    if(event.keyCode == 27){
+        const bbHolder = document.getElementById('backButtonHolder');
+        if(!bbHolder.classList.contains('hidden')) {
+            document.getElementById('backButton').click();
+        }
+        return;
+    }
     const hotkeys = document.getElementsByClassName('hotkey');
     for(const hotkeyElement of hotkeys){
-        if(event.key.toUpperCase() === hotkeyElement.innerHTML.toUpperCase()){
+        const keyName = event.key.toUpperCase();
+        if(keyName === hotkeyElement.innerHTML.toUpperCase()){
             const now = (new Date()).getTime();
-            console.log(now, event.key);
             if(hotkeyHistory.key == event.key.toUpperCase() && now - hotkeyHistory.time < 200){
                 hotkeyHistory.time = now;
                 return;
@@ -112,6 +119,14 @@ function uploadFile(event){
  * @param {String} newContent 
  */
 function setMain(newContent){
+    const bbHolder = document.getElementById('backButtonHolder');
+    if(newContent === templates.start){
+        if(!bbHolder.classList.contains('hidden')){
+            bbHolder.classList.add('hidden');
+        }
+    }else{
+        bbHolder.classList.remove('hidden');
+    }
     document.getElementById('main').innerHTML = newContent;
 }
 
@@ -141,5 +156,5 @@ function prevCombatant(){
  * @param {String} name 
  */
 async function requestMonster(name){
-    await get(`https://www.dnd5eapi.co/api/monsters/${name.toLowerCase().replace(/\s/g, '-')}/`);
+    return JSON.parse(await get(`https://www.dnd5eapi.co/api/monsters/${name.toLowerCase().replace(/\s/g, '-')}/`));
 }

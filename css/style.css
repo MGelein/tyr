@@ -8,18 +8,42 @@ body{
     width: 100%;
     padding-bottom: 3em;
     line-height: 1.8em;
+    overflow-x: hidden;
 }
 
 h1{
     font-size: 1cm;
     line-height: 1.2em;
+    margin-bottom: 0.2em;
+}
+
+header h1{
+    display: inline-block;
+    cursor: default;
+    margin-top: 0;
+    vertical-align: middle;
+    margin-left: -2.5cm;
 }
 
 header em{
     font-size: 0.45cm;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+header{
+    display:block;
+    text-align: center;
+    background-color: rgb(30, 30, 30);
+    padding: 1em;
+    margin: 0;
+    width: 100%;
+    color: white;
+    font-family: 'Roboto Mono', monospace;
 }
 
 button{
+    font-size: 0.5cm;
     color: #07F;
     background-color: white;
     border: 1px solid #07F;
@@ -28,7 +52,8 @@ button{
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
-    margin: 1em;
+    margin: 0.25em;
+    margin: 0.25em 0 0.25em 0
 }
 
 button:hover, button.clicked{
@@ -38,8 +63,8 @@ button:hover, button.clicked{
 }
 
 button.big{
-    padding: 2em;
-    font-size: 150%;
+    font-size: 1cm;
+    margin: 1em 0 1em 0;
 }
 
 div{
@@ -50,22 +75,6 @@ h1, h2, h3, h4, h5, h6{
     color: #07F;
 }
 
-header{
-    display:block;
-    text-align: center;
-    background-color: rgb(30, 30, 30);
-    padding-top: 1em;
-    padding-bottom: 1em;
-    margin: 0;
-    width: 100%;
-    color: white;
-    font-family: 'Roboto Mono', monospace;
-}
-
-header h1{
-    cursor: default;
-}
-
 footer{
     position: fixed;
     left: 0px;
@@ -74,7 +83,17 @@ footer{
     color: white;
     width: 100%;
     text-align: center;
-    font-size: 90%;
+    font-size: 0.4cm;
+    transition: all 0.3s ease;
+}
+
+footer:hover{
+    padding: 1em 0 1em 0;
+    font-size: 0.45cm;
+}
+
+footer > p{
+    margin: 0;
 }
 
 a{
@@ -91,6 +110,8 @@ a:hover{
     margin: 30px;
     text-align: center;
     font-size: 0.5cm;
+    margin-left: 80px;
+    margin-right: 80px;
 }
 
 .hotkey{
@@ -110,41 +131,13 @@ a:hover{
     border-top-color: lightgray;
 }
 
-@media screen and (min-width: 720px){
-    .container{
-        margin-right: 104px;
-        margin-left: 104px;
-    }
-}
-
-@media screen and (min-width: 1080px){
-    .container{
-        margin-right: 200px;
-        margin-left: 200px;
-    }
-}
-@media screen and (min-width: 1440px){
-    .container{
-        margin-right: 295px;
-        margin-left: 295px;
-    }
-}
-
-@media screen and (min-width: 1920px){
-    .container{
-        margin-right: 384px;
-        margin-left: 384px;
-    }
-}
-
-
 /**
 Table layout stuff
 **/
 table{
     width: 100%;
     padding: 0;
-    margin: 0;
+    margin: 0.5em 0 0 0;
     border-collapse: collapse;
     box-shadow: 2px 2px 8px 0px rgba(30, 30, 30, 0.2);
     text-align: center;
@@ -152,15 +145,15 @@ table{
 }
 
 thead img{
-    max-width: 2em;
-    max-height: 2em;
+    max-width: 0.8cm;
+    max-height: 0.8cm;
     display: inline-block;
     vertical-align: middle;
 }
 
 tbody img{
-    max-width: 1em;
-    max-height: 1em;
+    max-width: 0.5em;
+    max-height: 0.5em;
     display: inline-block;
     vertical-align: middle;
     border: 1px solid lightgrey;
@@ -185,7 +178,7 @@ thead{
 }
 
 thead td{
-    padding: 1em;
+    padding: 0.5em;
 }
 
 td{
@@ -275,4 +268,19 @@ td:nth-child(5){
     100% {
         transform: scale(1);
     }
+}
+
+#backButton{
+    vertical-align: middle;
+    max-height: 1.2cm;
+    font-size: 0.35cm;
+}
+
+#backButtonHolder{
+    float:left;
+    vertical-align: middle;
+}
+
+.hidden{
+    opacity: 0;
 }
