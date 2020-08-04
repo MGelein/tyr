@@ -19,11 +19,10 @@ window.onload = () => {
 }
 
 /**
- * Creates the global key listener that checks the screen every time someone presses a key, then quickly 
- * checks if this happened to be a hotkey currently on screen
+ * This is the actual keyboard listener, gets attached after screen switches
  * @param {KeyboardEvent} event 
  */
-document.onkeydown = (event) =>{
+function keyListener(event){
     //Special case for ESC
     if(event.keyCode == 27){
         const bbHolder = document.getElementById('backButtonHolder');
@@ -41,8 +40,9 @@ document.onkeydown = (event) =>{
     const hotkeys = document.getElementsByClassName('hotkey');
     for(const hotkeyElement of hotkeys){
         if(pressedKey.toUpperCase() === hotkeyElement.innerHTML.toUpperCase()){
-            const now = (new Date()).getTime();
-            hotkeyElement.click();
+            setTimeout( () => {
+                hotkeyElement.click();
+            }, 50);
             const button = hotkeyElement.parentElement;
             if(!button.classList.contains('clicked')){
                 setTimeout(()=>{
@@ -207,7 +207,6 @@ function createNew(){
  * Allows the use to run an already created combat, if no string is passed the user should upload a file
  */
 function runExisting(combatString){
-    console.log(combatString);
     if(combatString) loadCombat(combatString, mode.run);
     else{
         document.getElementById('fileUploader').click();
@@ -235,6 +234,8 @@ function uploadFile(event){
  * @param {String} newScreen
  */
 function setMain(newContent, newScreen){
+    console.log(newScreen);
+    document.onkeyup = undefined;
     screenSwitchTime = (new Date()).getTime;
     inScreenSwitchCooldown = true;
     screen.current = newScreen;
@@ -246,12 +247,11 @@ function setMain(newContent, newScreen){
     }else{
         bbHolder.classList.remove('hidden');
     }
-    setTimeout(() =>{
-        document.getElementById('main').innerHTML = newContent;
-    }, 100)
+    document.getElementById('main').innerHTML = newContent;
     setTimeout(() =>{
         const focusElement = document.getElementsByClassName('focus')[0];
         if(focusElement) focusElement.focus();//If anything has the focus class, make it focus
+        document.onkeyup = keyListener;
     }, 200);
 }
 
@@ -304,7 +304,7 @@ async function requestMonster(name){
  */
 function goBack(){
     if(screen.current == screen.combat) showMain();
-    else setMain(createCombatTable(), screen.combat);
+    else if(screen.current == screen.input) setMain(createCombatTable(), screen.combat);
 }
 
 /**
@@ -329,13 +329,14 @@ function showMain(){
     setMain(temp, screen.start);
     const button = document.getElementById('continueEditing');
     const modeButton = document.getElementById('modeChange');
-    if(!button) return;
-    if(combatants.length > 0){
-        button.style.display = 'inline-block';
-        modeButton.style.display = 'inline-block';
-    }else{
-        button.style.display = 'none';
-        modeButton.style.display = 'none';
+    if(button && modeButton){
+        if(combatants.length > 0){
+            button.style.display = 'inline-block';
+            modeButton.style.display = 'inline-block';
+        }else{
+            button.style.display = 'none';
+            modeButton.style.display = 'none';
+        }
     }
     const bbHolder = document.getElementById('backButtonHolder');
     if(!bbHolder.classList.contains('hidden')) bbHolder.classList.add('hidden')
