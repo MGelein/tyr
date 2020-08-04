@@ -3,7 +3,7 @@
  * Adds a new combatant. This starts the interactive dialogue of adding a new combatant
  */
 function addNewCombatant(){
-    setMain(templates.input_combatant);
+    setMain(templates.newcombatant, screen.input);
 }
 
 /**
