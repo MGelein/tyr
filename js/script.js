@@ -97,6 +97,13 @@ function loadCombat(combatString, combatMode){
  * combatants object.
  */
 function createCombatTable(){
+    //Check if we all have a valid initiative
+    for(let i = 0; i < combatants.length; i++){
+        if(isNaN(combatants[i].initiative)){
+            setTimeout( () => {initiativeCombatant(i)}, 100);
+            return "";
+        }
+    }
     let rows = [];
     if(combatants.length == 0) rows.push(templates.emptytable);
     else{
@@ -164,12 +171,17 @@ function createNew(){
  * Allows the use to run an already created combat, if no string is passed the user should upload a file
  */
 function runExisting(combatString){
+    console.log(combatString);
     if(combatString) loadCombat(combatString, mode.run);
     else{
         document.getElementById('fileUploader').click();
     }
 }
 
+/**
+ * This will try to read the file and parse it
+ * @param {FileEvent} event 
+ */
 function uploadFile(event){
     const fileUploader = event.target;
     const files = fileUploader.files;
@@ -178,6 +190,7 @@ function uploadFile(event){
     const reader = new FileReader();
     reader.onload = function(){runExisting(reader.result)};
     reader.readAsText(file, 'utf8');
+    fileUploader.value = '';
 }
 
 /**

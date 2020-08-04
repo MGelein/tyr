@@ -14,7 +14,7 @@ function createPlayer(name){
     player = {
         'name': name,
         'armor_class': '--',
-        'initiative': -99,
+        'initiative': '--',
         'hit_points': '--'
     };
     combatants.push(player);
