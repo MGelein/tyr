@@ -11,6 +11,15 @@ body{
     overflow-x: hidden;
 }
 
+input{
+    font-size: 0.6cm;
+    font-family: 'Merriweather', serif;
+    outline: none;
+    padding: 0.5em;
+    border: 1px solid #07F;
+    border-radius: 0.5em;
+}
+
 h1{
     font-size: 1cm;
     line-height: 1.2em;

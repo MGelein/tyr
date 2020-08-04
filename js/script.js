@@ -1,4 +1,4 @@
-const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant"]};
+const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "input_combatant"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 const hotkeyHistory = {key: '', time:0};
@@ -35,7 +35,6 @@ document.onkeydown = (event) =>{
             hotkeyElement.click();
             hotkeyHistory.key = event.key.toUpperCase();
             hotkeyHistory.time = now;
-            console.log("click", event.key);
             const button = hotkeyElement.parentElement;
             if(!button.classList.contains('clicked')){
                 setTimeout(()=>{
@@ -60,7 +59,7 @@ function loadTemplates(){
 function loadedTemplates(){
     let content = "";
     if(!FileReader) content = templates.filereadersupport;
-    else content = templates.start;
+    else content = templates.input_combatant;
     setMain(content);
 }
 
@@ -130,26 +129,6 @@ function setMain(newContent){
     document.getElementById('main').innerHTML = newContent;
 }
 
-/**
- * Adds a new combatant. This starts the interactive dialogue of adding a new combatant
- */
-function addNewCombatant(){
-    console.log("NEW!");
-}
-
-/**
- * Skips to the next combatant in the initiative order
- */
-function nextCombatant(){
-
-}
-
-/**
- * Moves back to the previous combatant in the initiative order
- */
-function prevCombatant(){
-
-}
 
 /**
  * Sends a request to the official SRD 5E API
