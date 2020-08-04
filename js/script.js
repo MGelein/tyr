@@ -31,19 +31,22 @@ document.onkeydown = (event) =>{
         }
         return;
     }
+    let pressedKey = event.key;
+    //Super hacky way to make arrows behave like prev/next keys
+    if(event.keyCode == 38) pressedKey = 'p';
+    if(event.keyCode == 40) pressedKey = 'n';
 
     //Otherwise check all current hotkeys on the screen
     const hotkeys = document.getElementsByClassName('hotkey');
     for(const hotkeyElement of hotkeys){
-        const keyName = event.key.toUpperCase();
-        if(keyName === hotkeyElement.innerHTML.toUpperCase()){
+        if(pressedKey.toUpperCase() === hotkeyElement.innerHTML.toUpperCase()){
             const now = (new Date()).getTime();
-            if(hotkeyHistory.key == event.key.toUpperCase() && now - hotkeyHistory.time < 100){
+            if(hotkeyHistory.key == pressedKey && now - hotkeyHistory.time < 100){
                 hotkeyHistory.time = now;
                 return;
             }
             hotkeyElement.click();
-            hotkeyHistory.key = event.key.toUpperCase();
+            hotkeyHistory.key = pressedKey.toUpperCase();
             hotkeyHistory.time = now;
             const button = hotkeyElement.parentElement;
             if(!button.classList.contains('clicked')){
