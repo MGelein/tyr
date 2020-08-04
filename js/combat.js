@@ -35,6 +35,13 @@ function infoCombatant(combatant){
 }
 
 /**
+ * Rename one of the combatants, if no combatant is supplied it will open a dialogue to try and pick one
+ */
+function renameCombatant(combatant){
+
+}
+
+/**
  * Skips to the next combatant in the initiative order
  */
 function nextCombatant(){

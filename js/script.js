@@ -1,7 +1,9 @@
-const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "input_combatant"]};
+const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 const hotkeyHistory = {key: '', time:0};
+let combatants = [];
+let round = 1;
 
 /**
  * Called when the document is loaded, this is the entry point of our code
@@ -59,7 +61,7 @@ function loadTemplates(){
 function loadedTemplates(){
     let content = "";
     if(!FileReader) content = templates.filereadersupport;
-    else content = templates.input_combatant;
+    else content = templates.start;
     setMain(content);
 }
 
@@ -78,12 +80,68 @@ function loadTemplate(name){
 
 /**
  * Loads the provided combat description and starts into the provided combat mode
- * @param {String} combatString the lines of a combat file
+ * @param {String} combatString the lines of a combat file, this is basically JSON
  * @param {String} combatMode either mode.edit or mode.run 
  */
 function loadCombat(combatString, combatMode){
     mode.current = combatMode;
-    setMain(templates.combatoverview);
+    combatants = parseCombatString(combatString);
+    setMain(createCombatTable());
+}
+
+/**
+ * Fills/updates the combatOverview template with the right amount of data from the
+ * combatants object.
+ */
+function createCombatTable(){
+    let rows = [];
+    if(combatants.length == 0) rows.push(templates.emptytable);
+    else{
+        for(combatant of combatants){
+            rows.push(createCombatRow(combatant));
+        }
+    }
+    let table = templates.combatoverview;
+    table = table.replace(/%%COMBATANTS%%/g, rows.join(""));
+    table = table.replace(/%%CONTROLS%%/g, mode.current == mode.edit ? templates.editcontrols : templates.combatcontrols);
+    table = table.replace(/%%TITLE%%/g, getModeTitle())
+    return table;
+}
+
+/**
+ * Creates a single entry in the combat row
+ * @param {Object} combatant a single combatant, may be undefined if there are no combatants yet
+ */
+function createCombatRow(combatant){
+    if(!combatant.initiative){//If initiative was not explicitly set, calculate it
+        combatant.initiative = Math.floor((combatant.dexterity - 10) / 2); + 10;
+    }
+    let row = templates.combatant;
+    row = row.replace(/%%NAME%%/g, combatant.name);
+    row = row.replace(/%%AC%%/g, combatant.armor_class);
+    row = row.replace(/%%HP%%/g, combatant.hit_points);
+    row = row.replace(/%%INITIATIVE%%/g, combatant.initiative);
+    return row;
+}
+
+/**
+ * Returns the title add-on depending on the mode we're currently in
+ */
+function getModeTitle(){
+    if(mode.current == mode.edit) return "Editing";
+    else if(mode.current == mode.run) return `Round ${round}`;
+    else return "Unknown Mode";
+}
+
+/**
+ * Parses the provided combat string (this should be JSON) and returns the list of combatants
+ * @param {String} s the string of JSON
+ */
+function parseCombatString(s){
+    s = s.trim();
+    if(s.length < 10) return [];
+    const objects = JSON.parse(s);
+    return objects;
 }
 
 /**
