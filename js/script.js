@@ -62,7 +62,7 @@ function loadedTemplates(){
     let content = "";
     if(!FileReader) content = templates.filereadersupport;
     else content = templates.start;
-    setMain(content);
+    setMain(content, screen.start);
 }
 
 /**
@@ -86,7 +86,7 @@ function loadTemplate(name){
 function loadCombat(combatString, combatMode){
     mode.current = combatMode;
     combatants = parseCombatString(combatString);
-    setMain(createCombatTable());
+    setMain(createCombatTable(), screen.combat);
 }
 
 /**
@@ -174,8 +174,10 @@ function uploadFile(event){
 /**
  * Sets the innerHTML of the main container. Just a little shorthand
  * @param {String} newContent 
+ * @param {String} newScreen
  */
-function setMain(newContent){
+function setMain(newContent, newScreen){
+    screen.current = newScreen;
     const bbHolder = document.getElementById('backButtonHolder');
     if(newContent === templates.start){
         if(!bbHolder.classList.contains('hidden')){
@@ -194,4 +196,12 @@ function setMain(newContent){
  */
 async function requestMonster(name){
     return JSON.parse(await get(`https://www.dnd5eapi.co/api/monsters/${name.toLowerCase().replace(/\s/g, '-')}/`));
+}
+
+/**
+ * Goes back to either the start menu (from the combat tool), or the combat menu (from any other screen)
+ */
+function goBack(){
+    if(screen.current == screen.combat) setMain(templates.start, screen.start);
+    else setMain(createCombatTable(), screen.combat);
 }
