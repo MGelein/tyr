@@ -12,12 +12,13 @@ body{
 }
 
 input{
-    font-size: 0.6cm;
+    font-size: 0.7cm;
     font-family: 'Merriweather', serif;
     outline: none;
     padding: 0.5em;
     border: 1px solid #07F;
     border-radius: 0.5em;
+    margin-top: 1em;
 }
 
 h1{
@@ -49,6 +50,11 @@ header{
     width: 100%;
     color: white;
     font-family: 'Roboto Mono', monospace;
+}
+
+button.inline{
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 button{

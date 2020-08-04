@@ -1,4 +1,4 @@
-const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols"]};
+const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 const hotkeyHistory = {key: '', time:0};
@@ -18,6 +18,7 @@ window.onload = () => {
  * @param {KeyboardEvent} event 
  */
 document.onkeydown = (event) =>{
+    //Special case for ESC
     if(event.keyCode == 27){
         const bbHolder = document.getElementById('backButtonHolder');
         if(!bbHolder.classList.contains('hidden')) {
@@ -25,6 +26,8 @@ document.onkeydown = (event) =>{
         }
         return;
     }
+
+    //Otherwise check all current hotkeys on the screen
     const hotkeys = document.getElementsByClassName('hotkey');
     for(const hotkeyElement of hotkeys){
         const keyName = event.key.toUpperCase();
@@ -97,8 +100,12 @@ function createCombatTable(){
     let rows = [];
     if(combatants.length == 0) rows.push(templates.emptytable);
     else{
-        for(combatant of combatants){
-            rows.push(createCombatRow(combatant));
+        combatants.sort((a, b) => {
+            return a.initiative - b.initiative;
+        });
+        for(let i = 0; i < combatants.length; i++){
+            const combatant = combatants[i];
+            rows.push(createCombatRow(combatant, i));
         }
     }
     let table = templates.combatoverview;
@@ -112,11 +119,12 @@ function createCombatTable(){
  * Creates a single entry in the combat row
  * @param {Object} combatant a single combatant, may be undefined if there are no combatants yet
  */
-function createCombatRow(combatant){
+function createCombatRow(combatant, index){
     if(!combatant.initiative){//If initiative was not explicitly set, calculate it
         combatant.initiative = Math.floor((combatant.dexterity - 10) / 2); + 10;
     }
     let row = templates.combatant;
+    row = row.replace(/%%ID%%/g, index);
     row = row.replace(/%%NAME%%/g, combatant.name);
     row = row.replace(/%%AC%%/g, combatant.armor_class);
     row = row.replace(/%%HP%%/g, combatant.hit_points);
@@ -187,6 +195,10 @@ function setMain(newContent, newScreen){
         bbHolder.classList.remove('hidden');
     }
     document.getElementById('main').innerHTML = newContent;
+    setTimeout(() =>{
+        const focusElement = document.getElementsByClassName('focus')[0];
+        if(focusElement) focusElement.focus();//If anything has the focus class, make it focus
+    }, 300);
 }
 
 

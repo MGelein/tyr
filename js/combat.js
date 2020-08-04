@@ -7,6 +7,21 @@ function addNewCombatant(){
 }
 
 /**
+ * Adds a player with the provided name to combat
+ * @param {String} name 
+ */
+function createPlayer(name){
+    player = {
+        'name': name,
+        'armor_class': '--',
+        'initiative': -99,
+        'hit_points': '--'
+    };
+    combatants.push(player);
+    setMain(createCombatTable(), screen.combat);
+}
+
+/**
  * Removes one of the combatants from the combat, if no combatant is supplied it will open a dialogue to try and pick one
  */
 function removeCombatant(combatant){
