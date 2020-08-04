@@ -176,6 +176,7 @@ tbody img{
     padding: 4px;
     margin: 4px;
     transition: all 0.3s ease-in;
+    cursor: pointer;
 }
  
 tbody img:hover{
@@ -298,4 +299,18 @@ td:nth-child(5){
 
 .hidden{
     opacity: 0;
+}
+
+#feedback{
+    color: #555;
+    padding: 1em;
+    transition: opacity 0.5s ease;
+}
+
+#feedback .warning{
+    color: #C00;
+}
+
+.monsterName{
+    text-transform: capitalize;
 }

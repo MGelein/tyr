@@ -1,9 +1,10 @@
-const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster"]};
+const templates = {toLoad: ["start", "filereadersupport", "combatoverview", "combatant", "newcombatant", "emptytable", "editcontrols", "combatcontrols", "newplayer", "newmonster", "nummonster", "selectcombatant"]};
 const mode = {current: "", edit: "EDIT", run: "RUN"};
 const screen = {current:"start", start:"start", combat: "combat", input:"input"};
 const hotkeyHistory = {key: '', time:0};
 let combatants = [];
 let round = 1;
+let monsterTemplate = {};//This holds the latest API response if it was a valid monster
 
 /**
  * Called when the document is loaded, this is the entry point of our code
@@ -121,7 +122,7 @@ function createCombatTable(){
  */
 function createCombatRow(combatant, index){
     if(!combatant.initiative){//If initiative was not explicitly set, calculate it
-        combatant.initiative = Math.floor((combatant.dexterity - 10) / 2); + 10;
+        combatant.initiative = Math.floor((combatant.dexterity - 10) / 2) + 10;
     }
     let row = templates.combatant;
     row = row.replace(/%%ID%%/g, index);
@@ -199,6 +200,25 @@ function setMain(newContent, newScreen){
         const focusElement = document.getElementsByClassName('focus')[0];
         if(focusElement) focusElement.focus();//If anything has the focus class, make it focus
     }, 300);
+}
+
+/**
+ * Shows the selection template with the provided action
+ * @param {String} action 
+ */
+function showSelection(action){
+    if(combatants.length < 1) return;
+    let selection = templates.selectcombatant;
+    selection = selection.replace(/%%ACTION%%/g, action);
+    let selectionList = [];
+    for(let i = 0; i < combatants.length; i+=2){
+        const cA = combatants[i];
+        const cB = combatants[i + 1];
+        const cBText = cB ? `<button onclick='removeCombatant(${i + 1})'><i class='hotkey'>${i + 2}</i>&nbsp;${combatants[i + 1].name}</button>`: ''
+        selectionList.push(`<button onclick='removeCombatant(${i})'><i class='hotkey'>${i + 1}</i>&nbsp;${combatants[i].name}</button>&nbsp;${cBText}`);
+    }
+    selection = selection.replace(/%%COMBATANTS%%/g, selectionList.join("<br>"));
+    setMain(selection, screen.input);
 }
 
 

@@ -1,6 +1,8 @@
 <tr id='combatant%%ID%%'>
     <td><b class='mark'></b></td>
-    <td><span>%%NAME%%</span><img src='img/pencil.png'><img src='img/info.png'></td>
+    <td><span>%%NAME%%</span>
+        <img onclick='renameCombatant("%%ID%%")' src='img/pencil.png'><img onclick='infoCombatant("%%ID%%")' src='img/info.png'><img onclick='removeCombatant("%%ID%%")' src='img/remove.png'>
+    </td>
     <td><span>%%INITIATIVE%%</span><img src='img/pencil.png'></td>
     <td><span>%%AC%%</span><img src='img/pencil.png'></td>
     <td><img src='img/dagger.png'><span>%%HP%%</span><img src='img/healing.png'></td>
