@@ -184,7 +184,7 @@ function showInfo(fight){
         extras.push(formatList(fight.condition_immunities, "Condition Immunities"));
     if(fight.senses) extras.push(formatSenses(fight.senses));
     if(fight.languages) extras.push(`<li><b>Languages: </b>${fight.languages}</li>`);
-    if(fight.challenge_rating) extras.push(`<li><b>Challenge Rating: </b>${fight.challenge_rating}</li>`);
+    if(fight.challenge_rating) extras.push(`<li><b>Challenge Rating: </b>${formatCR(fight.challenge_rating)}</li>`);
     temp = temp.replace(/%%EXTRAS%%/g, extras.length > 0 ? ("<ul class='extras'>" + extras.join("") + "</ul>") : "");
     const abilities = [];
     if(fight.special_abilities) abilities.push(formatAbilities(fight.special_abilities));
@@ -192,6 +192,14 @@ function showInfo(fight){
     temp = temp.replace(/%%ACTIONS%%/g, fight.actions ? formatActions(fight.actions) : "");
     temp = temp.replace(/%%LEGENDARY%%/g, fight.legendary_actions ? formatActions(fight.legendary_actions, true) : "");
     return temp;
+}
+
+/**
+ * formats the challenge rating
+ * @param {String} cr 
+ */
+function formatCR(cr){
+    return `${cr} (${xpPerCR[cr]} XP)`;
 }
 
 /**
