@@ -203,7 +203,7 @@ function parseCombatString(s){
  * Called by the button create new. This starts a new empty combat in edit mode
  */
 function createNew(){
-    if(ga) ga('send', 'event', 'new_combat');
+    if(gtag) gtag('event', 'new_combat');
     loadCombat("", mode.edit)
 }
 
@@ -230,7 +230,7 @@ function uploadFile(event){
     reader.onload = function(){runExisting(reader.result)};
     reader.readAsText(file, 'utf8');
     fileUploader.value = '';
-    if(ga) ga('send', 'event', 'upload');
+    if(gtag) gtag('event', 'upload');
 }
 
 /**
@@ -239,7 +239,6 @@ function uploadFile(event){
  * @param {String} newScreen
  */
 function setMain(newContent, newScreen){
-    console.log(newScreen);
     document.onkeyup = undefined;
     screenSwitchTime = (new Date()).getTime;
     inScreenSwitchCooldown = true;
@@ -301,7 +300,7 @@ function selCombatant(number){
  * @param {String} name 
  */
 async function requestMonster(name){
-    if(ga) ga('send', 'event', 'monster_api');
+    if(gtag) gtag('event', 'monster_api');
     return JSON.parse(await get(`https://www.dnd5eapi.co/api/monsters/${name.trim().toLowerCase().replace(/\s/g, '-')}/`));
 }
 
